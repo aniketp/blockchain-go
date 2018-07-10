@@ -42,6 +42,17 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 	return data
 }
 
+/* Validate that the computed SHA satisfies the criteria */
+func (pow *ProofOfWork) Validate() bool {
+	var hashInt big.Int
+
+	data := pow.prepareData(pow.block.Nonce)
+	hash := sha256.Sum256(data)
+	hashInt.SetBytes(hash[:])
+
+	return (hashInt.Cmp(pow.target) < 0)
+}
+
 /* Implementation of Core Proof of Work algorithm */
 func (pow *ProofOfWork) Run() (int , []byte) {
 	var hashInt big.Int
@@ -58,7 +69,7 @@ func (pow *ProofOfWork) Run() (int , []byte) {
 		fmt.Printf("\r%x", hash)
 		hashInt.SetBytes(hash[:])
 
-		/* If the calculated hash was less than target then we  */
+		/* If the calculated hash was less than target then we exit */
 		if hashInt.Cmp(pow.target) == -1 {
 			fmt.Printf("\n\n")
 			return nonce, hash[:]
@@ -128,9 +139,12 @@ func main() {
 	bc.Addblock("Send 1 more BTC to Lavannya")
 
 	for _, block := range bc.blocks {
+		pow := NewProofOfWork(block)
 		fmt.Printf("Prev. Hash: %x\n", block.PrevBlockHash)
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
+		fmt.Printf("Valid PoW: %s\n",
+			strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 	}
 }
