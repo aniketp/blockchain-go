@@ -22,19 +22,19 @@ func (bc *Blockchain) Addblock(data string) {
 	})
 
 	newBlock := NewBlock(data, lastHash)
-	err := bc.db.Update(func(tx *bolt.Tx) error {
+	err = bc.db.Update(func(tx *bolt.Tx) error {
 		bkt := tx.Bucket([]byte(blocksBucket))
-		err := bkt.Put(newBlock.Hash, newBlock.Serialize())
+		err = bkt.Put(newBlock.Hash, newBlock.Serialize())
 		// if err != nil {
 		// 	log.Fatal("Couldn't store the genesis block")
 		// }
-		err := bkt.Put([]byte("1"), newBlock.Hash)
+		err = bkt.Put([]byte("1"), newBlock.Hash)
 		// if err != nil {
 		// 	log.Fatal("Couldn't store the genesis hash")
 		// }
 		bc.tip = newBlock.Hash
+		return nil
 	})
-	return nil
 }
 
 /* Create and return an iterator for the blockchain */

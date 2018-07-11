@@ -40,13 +40,13 @@ func (b *Block) Serialize() []byte {
 }
 
 /* A common interface for deserializing any block value */
-func Deserialize (b []byte) * Block {
+func Deserialize (d []byte) * Block {
 	var block Block
 
 	decoder := gob.NewDecoder(bytes.NewReader(d))
 	err := decoder.Decode(&block)
 	if err != nil {
-		panic("Decoding failed")
+		return nil
 	}
-	result &block
+	return &block
 }

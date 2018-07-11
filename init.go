@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math/big"
 	"time"
 
@@ -34,21 +35,21 @@ func NewBlockChain() *Blockchain {
 		log.Fatal("Couldn't open the database")
 	}
 
-	err := db.Update(func(tx *bolt.Tx) error {
+	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 
 		/* The Bucket does not exist, hence create one */
 		if b == nil {
 			genesis := NewGenesisBlock()
 			b, err := tx.CreateBucket([]byte(blocksBucket))
-			// if err != nil {
-			// 	log.Fatal("Couldn't create a new bucket")
-			// }
-			err := b.Put(genesis.Hash, genesis.Serialize())
+			if err != nil {
+				log.Fatal("Couldn't create a new bucket")
+			}
+			err = b.Put(genesis.Hash, genesis.Serialize())
 			// if err != nil {
 			// 	log.Fatal("Couldn't store the genesis block")
 			// }
-			err := b.Put([]byte("1"), genesis.Hash)
+			err = b.Put([]byte("1"), genesis.Hash)
 			// if err != nil {
 			// 	log.Fatal("Couldn't write to the genesis block")
 			// }
@@ -57,7 +58,7 @@ func NewBlockChain() *Blockchain {
 			/* Since the bucket exists, retrieve first value */
 			tip = b.Get([]byte("1"))
 		}
-		return nil
+		return err
 	})
 
 	bc := Blockchain{tip, db}
