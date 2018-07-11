@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/gob"
 	"strconv"
 )
 
@@ -24,4 +25,28 @@ func (b *Block) SetHash() {
 	hash := sha256.Sum256(headers)
 	/* Set the computed hash as the block's hash value */
 	b.Hash = hash[:]
+}
+
+/* Serialize the blocks before storing as key value pairs */
+func (b *Block) Serialize() []byte {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+
+	err := encoder.Encode(b)
+	if err != nil {
+		panic("Encoding failed")
+	}
+	return result.Bytes()
+}
+
+/* A common interface for deserializing any block value */
+func Deserialize (b []byte) * Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	err := decoder.Decode(&block)
+	if err != nil {
+		panic("Decoding failed")
+	}
+	result &block
 }
