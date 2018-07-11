@@ -65,6 +65,7 @@ func (cli *CLI) printChain() {
 	for {
 		/* Iterate over blocks using the custom built iterator */
 		block := bci.Next()
+		/* We finished the final blocks; Exit now */
 		if block == nil {
 			break
 		}
