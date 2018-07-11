@@ -14,12 +14,15 @@ type CLI struct {
 
 /* Driver function for the blockchain's CLI */
 func (cli *CLI) Run() {
-	cli.validateArgs()
-
+	/* Store the possible inputs as separate commands */
 	addBlockCmd := flag.NewFlagSet("addblock", flag.ExitOnError)
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 	addBlockData := addBlockCmd.String("data", "", "Block data")
 
+	/*
+	 * blockchain addblock -data "Send 1 BTC to Lavannya"
+	 * blockchain printchain
+	 */
 	switch os.Args[1] {
 	case "addblock":
 		err := addBlockCmd.Parse(os.Args[2:])
@@ -75,17 +78,6 @@ func (cli *CLI) printChain() {
 	}
 }
 
-func (cli *CLI) validateArgs() {
-	if os.Args[0] != "blockchain" {
-		cli.printUsage()
-		os.Exit(1)
-	}
-	if !(os.Args[1] == "addblock" || os.Args[1] == "printchain") {
-		cli.printUsage()
-		os.Exit(1)
-	}
-}
-
 func (cli *CLI) printUsage() {
-	fmt.Printf("Usage: blockchain [addblock] [printchain ...]")
+	fmt.Printf("Usage: blockchain [addblock] [printchain ...]\n")
 }
