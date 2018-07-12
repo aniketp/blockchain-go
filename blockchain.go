@@ -1,6 +1,10 @@
 package main
 
-import "github.com/boltdb/bolt"
+import (
+	"encoding/hex"
+
+	"github.com/boltdb/bolt"
+	)
 
 type Blockchain struct {
 	tip		[]byte
@@ -41,4 +45,31 @@ func (bc *Blockchain) Addblock(data string) {
 func (bc *Blockchain) Iterator() *BlockchainIterator {
 	bcitr := &BlockchainIterator{bc.tip, bc.db}
 	return bcitr
+}
+
+/* Find the transactions containing unspent outputs */
+func (bc *Blockchain) FindUnspentTransactions(address string) []Transaction {
+	var unspentTXs []Transaction
+	spentTXOs := make(map[string][]int)
+	bci := bc.Iterator()
+
+	for {
+		block := bci.Next()
+
+		for _, tx := range block.Transactions {
+			txID := hex.EncodeToString(tx.ID)
+
+		Outputs:
+			for outIdx, out := range tx.Vout {
+				/* Was the output spent */
+				if spentTXOs[outIdx] != nil {
+					for _, spentOut := range spentTXOs[txID] {
+						if spentOut == outIdx {
+							continue Outputs
+						}
+					}
+				}
+			}
+		}
+	}
 }
