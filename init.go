@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math/big"
 	"time"
@@ -28,7 +29,7 @@ func NewGenesisBlock(coinbase *Transaction) *Block {
 
 /* This function checks for the existence of a bucket in the database file, */
 /* if it exists, retrieves the value else creates one with the genesis hash */
-func NewBlockChain(address string) *Blockchain {
+func CreateBlockChain(address string) *Blockchain {
 	var tip []byte
 	db, err := bolt.Open(dbFile, 0600, nil)
 	if err != nil {

@@ -1,7 +1,7 @@
 package main
 
 func main() {
-	bc := NewBlockChain()
+	//bc := CreateBlockChain()
 
 	// bc.Addblock("Send 1 BTC to Lavannya")
 	// bc.Addblock("Send 2 more BTC to Lavannya")
@@ -19,7 +19,7 @@ func main() {
 	// 	fmt.Println()
 	// }
 
-	defer bc.db.Close()
-	cli := CLI{bc}
+	//defer bc.db.Close()
+	cli := CLI{}
 	cli.Run()
 }
