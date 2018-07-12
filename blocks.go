@@ -9,7 +9,7 @@ import (
 
 type Block struct {
 	Timestamp  	int64		/* Time of block creation */
-	Data		[]byte		/* Valuable info in the block */
+	Transactions	[]*Transaction	/* Valuable info in the block */
 	PrevBlockHash	[]byte		/* Hash of the previous block */
 	Hash 		[]byte		/* Hash of the block */
 	Nonce		int		/* Random nonce for PoW */
@@ -37,6 +37,18 @@ func (b *Block) Serialize() []byte {
 		panic("Encoding failed")
 	}
 	return result.Bytes()
+}
+
+/* Hash the transactions to be used while preparing hash of block */
+func (b *Block) HashTransactions() []byte {
+	var txHashes [][]byte
+	var txHash [32]byte
+
+	for _, tx := range b.Transactions {
+		txHashes = append(txHashes, tx.ID)
+	}
+	txHash = sha256.Sum256(bytes.Join(txHashes, []byte{}))
+	return txHash[:]
 }
 
 /* A common interface for deserializing any block value */

@@ -9,8 +9,8 @@ import (
 )
 
 /* Create and return a new block */
-func NewBlock(data string, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), []byte(data),
+func NewBlock(transactions []*Transaction, prevBlockHash []byte) *Block {
+	block := &Block{time.Now().Unix(), transactions,
 		prevBlockHash, []byte{}, 0}
 	pow := NewProofOfWork(block)
 	nonce, hash := pow.Run()
@@ -22,13 +22,13 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 }
 
 /* Return the new (first) genesis block */
-func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+func NewGenesisBlock(coinbase *Transaction) *Block {
+	return NewBlock([]*Transaction{coinbase}, []byte{})
 }
 
 /* This function checks for the existence of a bucket in the database file, */
 /* if it exists, retrieves the value else creates one with the genesis hash */
-func NewBlockChain() *Blockchain {
+func NewBlockChain(address string) *Blockchain {
 	var tip []byte
 	db, err := bolt.Open(dbFile, 0600, nil)
 	if err != nil {
@@ -36,6 +36,7 @@ func NewBlockChain() *Blockchain {
 	}
 
 	err = db.Update(func(tx *bolt.Tx) error {
+		cbtx := NewCoinbaseTX(address, genesisCoinbaseData)
 		b := tx.Bucket([]byte(blocksBucket))
 
 		/* The Bucket does not exist, hence create one */
@@ -72,4 +73,21 @@ func NewProofOfWork (b *Block) *ProofOfWork {
 	target.Lsh(target, uint(256 - targetBits))
 	pow := &ProofOfWork{b, target}
 	return pow
+}
+
+/* Create a new Coinbase transaction */
+/* Coinbase transaction is a special type of transaction, */
+/* which doesn't require any previous input for validation */
+func NewCoinbaseTX(to, data string) *Transaction {
+	if data == "" {
+		/* Miner gets the reward for creating blocks */
+		data = fmt.Sprintf("Reward to '%s'", to)
+	}
+
+	txin := TXInput{[]byte{}, -1, data}
+	txout := TXOutput{subsidy, to}
+	tx := Transaction{nil, []TXInput{txin}, []TXOutput{txout}}
+	tx.setID()
+
+	return &tx
 }
