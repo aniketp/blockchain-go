@@ -19,6 +19,11 @@ func (cli *CLI) Run() {
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 	addBlockData := addBlockCmd.String("data", "", "Block data")
 
+	if len(os.Args) < 2 {
+		cli.printUsage()
+		os.Exit(1)
+	}
+
 	/*
 	 * blockchain addblock -data "Send 1 BTC to Lavannya"
 	 * blockchain printchain
