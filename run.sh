@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-go build && ./blockchain
+go build && ./blockchain printchain

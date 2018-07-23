@@ -7,7 +7,12 @@ Initial (now redundant) approach was to store the Blocks containing SHA-256
 Hashes of the current and previous blocks along with the data (usually the
 transactions).
 
-![Demo.gif](images/initial.gif)
+Later revisions added a CLI support using Golang's builtin `os.Args` package.
+
+<p float="left">
+  <img src="images/initial.gif" width="440" height="400" />
+  <img src="images/second.gif" width="440" height="400" />
+</p>
 
 ### Hashing algorithm
 
@@ -96,4 +101,39 @@ Valid PoW: true
 ## Blockchain-CLI
 
 The functionality to create custom transactions and store them as a ledger was
-introduced after cd70d1765bfb4d90378900171344df0a4bf5356a.
+introduced after [66b9b8d](https://github.com/aniketp/blockchain/tree/66b9b8d9d4728b12bd4bb8a940f9fd6ea6485163).
+
+### Dependencies
+```
+ $ go get github.com/boltdb/bolt
+ $ go get github.com/eiannone/keyboard
+```
+
+### Usage
+``` bash
+Usage: blockchain [addblock] [printchain ...]
+```
+Initialize a blockchain database. Then add blocks or view the existing records.
+``` bash
+ ▶ ./blockchain addblock -data "Gangadhar he Shaktimaan hai"
+ Mining the block containing "Genesis Block"
+ 00001296932b2c21660b44e6d61e90f2b8733ea6de3cd50ab605acdfc4499e49
+
+ Mining the block containing "Gangadhar he Shaktimaan hai"
+ 000010f6cd380c3440cb0d9254f044569e4c67f444306d709f3c70180b4fff32
+
+ Success!
+```
+``` bash
+ ▶ ./blockchain printchain
+ Prev. hash: 00001296932b2c21660b44e6d61e90f2b8733ea6de3cd50ab605acdfc4499e49
+ Data: Gangadhar he Shaktimaan hai
+ Hash: 000010f6cd380c3440cb0d9254f044569e4c67f444306d709f3c70180b4fff32
+ PoW: true
+
+ Prev. hash:
+ Data: Genesis Block
+ Hash: 00001296932b2c21660b44e6d61e90f2b8733ea6de3cd50ab605acdfc4499e49
+ PoW: true
+
+```
