@@ -1,11 +1,11 @@
-package main
+package src
 
 import (
-	"log"
 	"flag"
 	"fmt"
-	"strconv"
+	"log"
 	"os"
+	"strconv"
 )
 
 type CLI struct {

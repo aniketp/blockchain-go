@@ -1,10 +1,10 @@
-package main
+package src
 
 import "github.com/boltdb/bolt"
 
 type Blockchain struct {
-	tip		[]byte
-	db		*bolt.DB
+	tip []byte
+	db  *bolt.DB
 }
 
 /* Add a new block to existing blockchain */

@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/aniketp/blockchain-go/src"
+)
+
 func main() {
 	bc := NewBlockChain()
 
