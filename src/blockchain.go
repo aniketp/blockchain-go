@@ -39,6 +39,6 @@ func (bc *Blockchain) Addblock(data string) {
 
 /* Create and return an iterator for the blockchain */
 func (bc *Blockchain) Iterator() *BlockchainIterator {
-	bcitr := &BlockchainIterator{bc.tip, bc.db}
+	bcitr := &BlockchainIterator{bc.tip, bc.Db}
 	return bcitr
 }

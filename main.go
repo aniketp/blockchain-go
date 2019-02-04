@@ -23,7 +23,7 @@ func main() {
 	// 	fmt.Println()
 	// }
 
-	defer bc.db.Close()
+	defer bc.Db.Close()
 	cli := src.CLI{bc}
 	cli.Run()
 }

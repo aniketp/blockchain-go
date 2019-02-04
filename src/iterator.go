@@ -15,7 +15,7 @@ type BlockchainIterator struct {
 func (itr *BlockchainIterator) Next() *Block {
 	var block *Block
 
-	err := itr.Db.View(func(tx *bolt.Tx) error {
+	err := itr.db.View(func(tx *bolt.Tx) error {
 		bkt := tx.Bucket([]byte(blocksBucket))
 		encodedBlock := bkt.Get(itr.currentHash)
 		block = Deserialize(encodedBlock)
