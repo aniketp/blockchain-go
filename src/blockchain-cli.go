@@ -9,7 +9,7 @@ import (
 )
 
 type CLI struct {
-	bc *Blockchain
+	Bc *Blockchain
 }
 
 /* Driver function for the blockchain's CLI */
@@ -60,12 +60,12 @@ func (cli *CLI) Run() {
 
 /* Following are the utility functions to do what the user desired */
 func (cli *CLI) addBlock(data string) {
-	cli.bc.Addblock(data)
+	cli.Bc.Addblock(data)
 	fmt.Println("Success!")
 }
 
 func (cli *CLI) printChain() {
-	bci := cli.bc.Iterator()
+	bci := cli.Bc.Iterator()
 
 	for {
 		/* Iterate over blocks using the custom built iterator */

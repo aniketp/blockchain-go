@@ -4,7 +4,7 @@ import "github.com/boltdb/bolt"
 
 type Blockchain struct {
 	tip []byte
-	db  *bolt.DB
+	Db  *bolt.DB
 }
 
 /* Add a new block to existing blockchain */
@@ -15,14 +15,14 @@ func (bc *Blockchain) Addblock(data string) {
 
 	var lastHash []byte
 	/* Retrieve ? hash */
-	err := bc.db.View(func(tx *bolt.Tx) error {
+	err := bc.Db.View(func(tx *bolt.Tx) error {
 		bkt := tx.Bucket([]byte(blocksBucket))
 		lastHash = bkt.Get([]byte("1"))
 		return nil
 	})
 
 	newBlock := NewBlock(data, lastHash)
-	err = bc.db.Update(func(tx *bolt.Tx) error {
+	err = bc.Db.Update(func(tx *bolt.Tx) error {
 		bkt := tx.Bucket([]byte(blocksBucket))
 		err = bkt.Put(newBlock.Hash, newBlock.Serialize())
 		// if err != nil {

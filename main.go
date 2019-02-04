@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	bc := NewBlockChain()
+	bc := src.NewBlockChain()
 
 	// bc.Addblock("Send 1 BTC to Lavannya")
 	// bc.Addblock("Send 2 more BTC to Lavannya")
@@ -24,6 +24,6 @@ func main() {
 	// }
 
 	defer bc.db.Close()
-	cli := CLI{bc}
+	cli := src.CLI{bc}
 	cli.Run()
 }
