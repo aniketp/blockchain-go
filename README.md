@@ -2,17 +2,12 @@
 
 An implementation of blockchain in Golang.
 
-## Demo
 Initial (now redundant) approach was to store the Blocks containing SHA-256
 Hashes of the current and previous blocks along with the data (usually the
 transactions).
 
 Later revisions added a CLI support using Golang's builtin `os.Args` package.
 
-<p float="left">
-  <img src="images/initial.gif" width="440" height="400" />
-  <img src="images/second.gif" width="440" height="400" />
-</p>
 
 ## Blockchain-CLI
 
